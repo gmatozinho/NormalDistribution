@@ -19,24 +19,21 @@ namespace NormalDistribution
         {
             var grid = new Grid() { };
 
-            for (int i = 0; i < 41; i++)
+            for (var i = 0; i < 41; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             }
 
-            for (int i = 0; i < 11; i++)
+            for (var i = 0; i < 11; i++)
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                if (i > 0)
-                {
-                    var topName = new Label {Text = "" + (i-1)};
-                    grid.Children.Add(topName, i, 0);
-                }
-
+                if (i <= 0) continue;
+                var topName = new Label {Text = "" + (i-1)};
+                grid.Children.Add(topName, i, 0);
             }
 
             var pos = 0.0;
-            for (int i = 1; i < 41; i++)
+            for (var i = 1; i < 41; i++)
             {
                 var leftName = new Label { Text = "" + pos};
                 pos += 0.1;
@@ -45,9 +42,9 @@ namespace NormalDistribution
 
             var count = 0;
 
-            for (int i = 1; i < grid.RowDefinitions.Count; i++)
+            for (var i = 1; i < grid.RowDefinitions.Count; i++)
             {
-                for (int j = 1; j < grid.ColumnDefinitions.Count; j++)
+                for (var j = 1; j < grid.ColumnDefinitions.Count; j++)
                 {
                     var test = new Label { Text = ""+list[count]};
                     grid.Children.Add(test,j,i);
