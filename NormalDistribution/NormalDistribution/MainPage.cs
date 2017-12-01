@@ -13,27 +13,9 @@ namespace NormalDistribution
     {
         public MainPage()
         {
-            Main();
-            Test();
-            Content = BuildGrid(list);
+            Content = BuildGrid(CalculateNormalDistribuitionValues());
         }
-
-        static List<double> list = new List<double>();
-
-        private static void TestApproximationMethods(DefiniteIntegral integral, int subdomainCount)
-        {
-
-           list.Add(integral.Approximate(DefiniteIntegral.ApproximationMethod.RectangleMidpoint, subdomainCount));
-        }
-
-        public static void Main()
-        {
-            TestApproximationMethods(new DefiniteIntegral(x => x * x * x, new Interval(0, 1)), 10000);
-            TestApproximationMethods(new DefiniteIntegral(x => 1 / x, new Interval(1, 99)), 1000);
-            TestApproximationMethods(new DefiniteIntegral(x => x, new Interval(0, 5000)), 500000);
-            TestApproximationMethods(new DefiniteIntegral(x => x, new Interval(0, 6000)), 6000000);
-        }
-
+        
         public Grid BuildGrid(List<double> list)
         {
             var grid = new Grid() { };
@@ -78,42 +60,27 @@ namespace NormalDistribution
         }
 
 
-
-        public List<double> CalculateNormalDistribuition()
+        public List<double> CalculateNormalDistribuitionValues()
         {
             double zScore;
-            var sumDistribuition = 0.0;
             var list = new List<double>();
-            
             for (zScore=0; zScore < 3.99; zScore+=0.01)
             {
-                list.Add(Math.Round(sumDistribuition,6));
-                var zResult = -(Math.Pow(zScore,2)) / 2;
-                var firstPart = (1 / Math.Sqrt(2 * Math.PI));
-                var secondPart = (Math.Exp(zResult));
-                var normDist =  (firstPart * secondPart)/100;
-                sumDistribuition += normDist;
+                var result = CalculateNormalDistribuition(zScore);
+                list.Add(Math.Round(result,4));
             }
 
             return list;
         }
 
-
-        private void Test()
+        private double CalculateNormalDistribuition(double z)
         {
             var firstPart = (1 / Math.Sqrt(2 * Math.PI));
-
-            var sum = 0.0;
-            var n = 6;
-            var r1 = Math.Pow(-1.0, n);
-            var r2 = 2 * n;
-            var r3 = 2 * n * (fatorial(n));
-
-            var integral = new DefiniteIntegral(x => r1 * (Math.Pow(x,r2)/r3), new Interval(0.0, 0.01));
+            var integral = new DefiniteIntegral((x => Math.Exp(-(x*x/2) )), new Interval(0.0, z));
             var aproximatte = integral.Approximate(DefiniteIntegral.ApproximationMethod.RectangleMidpoint, 10000);
             var result = firstPart * aproximatte;
-            var result2 = result;
 
+            return result;
         }
 
         public static Int32 fatorial(Int32 num)
@@ -122,7 +89,6 @@ namespace NormalDistribution
             {
                 return 1;
             }
-            // Poderia colocar um else, porem como eh usado o return, ele nao eh mais necessario
             return num * fatorial(num - 1);
         }
 
