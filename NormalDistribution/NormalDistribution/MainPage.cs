@@ -52,7 +52,6 @@ namespace NormalDistribution
                     grid.Children.Add(test,j,i);
                     count++;
                 }
-                
             }
 
             return grid;
@@ -67,7 +66,7 @@ namespace NormalDistribution
             for (zScore=0; zScore < 3.99; zScore+=0.01)
             {
                 var result = CalculateNormalDistribuition(zScore);
-                list.Add(Math.Round(result,4));
+                list.Add(Math.Round(result,6));
             }
 
             return list;
@@ -75,25 +74,52 @@ namespace NormalDistribution
 
         private double CalculateNormalDistribuition(double z)
         {
-            var firstPart = (1 / Math.Sqrt(2 * Math.PI));
-            var integral = new DefiniteIntegral((x => Math.Exp(-(x*x/2) )), new Interval(0.0, z));
-            var aproximatte = integral.Approximate(DefiniteIntegral.ApproximationMethod.RectangleMidpoint, 10000);
-            var result = firstPart * aproximatte;
+            var integral = new DefiniteIntegral(x => somatorium(x,27), new Interval(0.0, z));
+            var aproximatte = integral.Approximate(DefiniteIntegral.ApproximationMethod.RectangleMidpoint, 1);
+            
+            
+            var result = aproximatte;
 
             return result;
         }
 
-        public static Int32 fatorial(Int32 num)
+        private double somatorium(double x,double terms)
         {
-            if (num == 1)
+            double somatorio = 0;
+
+            var firstPart = (1 / Math.Sqrt(2 * Math.PI));
+
+            for (var n = 0; n <= terms; n++)
             {
-                return 1;
+                var alternateValue = Math.Pow(-1, n);
+                var numerador = (Math.Pow(x, 2 * n));
+                var firstPartDivision = (Math.Pow(2, n));
+                var secondPartDivision = fatorial(n);
+                var denominador = firstPartDivision * secondPartDivision;
+                var ztf = numerador / denominador;
+                var v = alternateValue * ztf;
+                somatorio += v;
             }
-            return num * fatorial(num - 1);
+
+            
+
+            return firstPart * somatorio;
         }
 
+        public static Int32 fatorial(Int32 num)
+        {
+            var som = 1;
+            for (int i = 1; i <= num; i++)
+            {
+                som *= i;
+
+            }
+
+            return som;
+        }
 
     }
+
     public class Interval
     {
         public Interval(double leftEndpoint, double size)
