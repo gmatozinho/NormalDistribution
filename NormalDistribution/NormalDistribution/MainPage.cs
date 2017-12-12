@@ -55,7 +55,7 @@ namespace NormalDistribution
 
         }
 
-
+        //Gera a lista com todos os valores de distribuição normal calculados com precisão de 6 casas decimais
         public List<double> CalculateNormalDistribuitionValues()
         {
             double zScore;
@@ -69,16 +69,19 @@ namespace NormalDistribution
             return list;
         }
 
+        //Calcula um valor especifico de distribuição normal multiplicando a constante pela integral da série
         private double CalculateNormalDistribuition(double z)
         {
 
             var firstPart = (1 / Math.Sqrt(2 * Math.PI));
-            var aproximatte = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,27), 0, z, 10000);
-            var result = firstPart * aproximatte;
+            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,27), 0, z, 10000);
+            var result = firstPart * integrate;
 
             return result;
         }
 
+
+        //Função que calcula o somatório com o numero de termos estabelecido
         private double CalcSomatorio(double x, double terms)
         {
             double somatorio = 0;
