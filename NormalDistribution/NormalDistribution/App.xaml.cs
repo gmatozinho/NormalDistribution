@@ -10,10 +10,8 @@ namespace NormalDistribution
     public partial class App : Application
     {
         public App()
-        {
-            InitializeComponent();
-
-            MainPage = new NormalDistribution.MainPage();
+        {           
+           MainPage = new MainPage();
         }
 
         protected override void OnStart()
