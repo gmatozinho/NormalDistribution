@@ -46,8 +46,17 @@ namespace NormalDistribution
                 for (var j = 1; j < grid.ColumnDefinitions.Count; j++)
                 {
                     if (list.Count == count) return grid;
-                    var test = new Label {Text = "" + list[count]};
-                    grid.Children.Add(test, j, i);
+                    Label label;
+                    if(j==1 && i == 1)
+                    {
+                        label = new Label { Text = "-"};
+                    }
+                    else
+                    {
+                        label = new Label { Text = "" + list[count] };
+                    }
+                   
+                    grid.Children.Add(label, j, i);
                     count++;
                 }
             }
@@ -62,7 +71,7 @@ namespace NormalDistribution
             double point;
             var list = new List<decimal>();
             var oldPoint = 0.0;
-            for (point = 0; point < 3*Math.PI; point += 0.01*Math.PI)
+            for (point = 0.0; point <= 3*Math.PI; point += 0.01*Math.PI)
             {
                 var result = CalculateNormalDistribuition(oldPoint,point);
                 list.Add(Math.Round(result, 6));
