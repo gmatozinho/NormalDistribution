@@ -59,26 +59,23 @@ namespace NormalDistribution
         //Gera a lista com todos os valores de distribuição normal calculados com precisão de 6 casas decimais
         public List<decimal> CalculateNormalDistribuitionValues()
         {
-            double zScore;
+            double point;
             var list = new List<decimal>();
-            var oldzscore = 0.0;
-            for (zScore = 0; zScore < 3*Math.PI; zScore += 0.01*Math.PI)
+            var oldPoint = 0.0;
+            for (point = 0; point < 3*Math.PI; point += 0.01*Math.PI)
             {
-                var result = CalculateNormalDistribuition(oldzscore,zScore);
-                list.Add((decimal)Math.Round(result, 6));
-                oldzscore = zScore;
+                var result = CalculateNormalDistribuition(oldPoint,point);
+                list.Add(Math.Round(result, 6));
+                oldPoint = point;
             }
 
             return list;
         }
 
         //Calcula um valor especifico de distribuição normal multiplicando a constante pela integral da série
-        private decimal CalculateNormalDistribuition(double init,double z)
+        private decimal CalculateNormalDistribuition(double init,double end)
         {
-
-            //var firstPart = (1 / Math.Sqrt(2 * Math.PI));
-            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,15), init, z, 10000);
-            //var result = firstPart * integrate;
+            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,20), init, end, 10000);
             decimal result = (decimal)integrate;
             result = decimal.Parse(result.ToString(), NumberStyles.Float);
           
@@ -95,13 +92,10 @@ namespace NormalDistribution
             {
                 var alternateValue = Math.Pow(-1, n);
                 var numerador = (Math.Pow(x, 2 * n)) * alternateValue;
-                //var firstPartDivision = (Math.Pow(2, n));
-                //var secondPartDivision = SpecialFunctions.Factorial(n);
-                //var denominador = firstPartDivision * secondPartDivision;
                 var denominador = SpecialFunctions.Factorial(2 * n + 1);
-                var ztf = numerador / denominador;
+                var result = numerador / denominador;
                 
-                somatorio += ztf;
+                somatorio += result;
             }
 
 
