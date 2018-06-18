@@ -46,15 +46,8 @@ namespace NormalDistribution
                 for (var j = 1; j < grid.ColumnDefinitions.Count; j++)
                 {
                     if (list.Count == count) return grid;
-                    Label label;
-                    if(j==1 && i == 1)
-                    {
-                        label = new Label { Text = "-"};
-                    }
-                    else
-                    {
-                        label = new Label { Text = "" + list[count] };
-                    }
+                    Label label = new Label { Text = "" + list[count] };
+                    
                    
                     grid.Children.Add(label, j, i);
                     count++;
@@ -70,21 +63,20 @@ namespace NormalDistribution
         {
             double point;
             var list = new List<decimal>();
-            var oldPoint = 0.0;
-            for (point = 0.0; point <= 3*Math.PI; point += 0.01*Math.PI)
+            
+            for (point = 0.0 * Math.PI; point < 3*Math.PI; point += 0.01*Math.PI)
             {
-                var result = CalculateNormalDistribuition(oldPoint,point);
-                list.Add(Math.Round(result, 6));
-                oldPoint = point;
+                var result = CalculateNormalDistribuition(point);
+                list.Add(Math.Round(result, 6));                
             }
 
             return list;
         }
 
         //Calcula um valor especifico de distribuição normal multiplicando a constante pela integral da série
-        private decimal CalculateNormalDistribuition(double init,double end)
+        private decimal CalculateNormalDistribuition(double end)
         {
-            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,20), init, end, 10000);
+            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,20), 0, end, 10000);
             decimal result = (decimal)integrate;
             result = decimal.Parse(result.ToString(), NumberStyles.Float);
           
