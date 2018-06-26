@@ -58,33 +58,24 @@ namespace NormalDistribution
 
         }
 
-        //Gera a lista com todos os valores de distribuição normal calculados com precisão de 6 casas decimais
+        //Gera a lista com todos os valores da integral de sin(x)/x calculados com precisão de 6 casas decimais
         public List<decimal> CalculateNormalDistribuitionValues()
         {
             double point;
+            decimal result;
+            double sum=0;
             var list = new List<decimal>();
             
             for (point = 0.0 * Math.PI; point < 3*Math.PI; point += 0.01*Math.PI)
             {
-                var result = CalculateNormalDistribuition(point);
+                sum = CalcSomatorio(point,20);
+                result = decimal.Parse(sum.ToString(), NumberStyles.Float);
                 list.Add(Math.Round(result, 6));                
             }
 
             return list;
         }
 
-        //Calcula um valor especifico de distribuição normal multiplicando a constante pela integral da série
-        private decimal CalculateNormalDistribuition(double end)
-        {
-            var integrate = SimpsonRule.IntegrateComposite(x => CalcSomatorio(x,20), 0, end, 10000);
-            decimal result = (decimal)integrate;
-            result = decimal.Parse(result.ToString(), NumberStyles.Float);
-          
-            return result;
-        }
-
-
-        //Função que calcula o somatório com o numero de termos estabelecido
         private double CalcSomatorio(double x, double terms)
         {
             double somatorio = 0;
@@ -92,8 +83,8 @@ namespace NormalDistribution
             for (var n = 0; n <= terms; n++)
             {
                 var alternateValue = Math.Pow(-1, n);
-                var numerador = (Math.Pow(x, 2 * n)) * alternateValue;
-                var denominador = SpecialFunctions.Factorial(2 * n + 1);
+                var numerador = (Math.Pow(x, 2 * n+1)) * alternateValue;
+                var denominador = (2 * n + 1) * SpecialFunctions.Factorial(2 * n + 1);
                 var result = numerador / denominador;
                 
                 somatorio += result;
